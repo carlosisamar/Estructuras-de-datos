@@ -1,21 +1,33 @@
 #include "record.h"
 
 struct record_ {
-  /* To be implemented */
+	long next
+	int numcols
+	void **values
 };
 
 record_t* record_create(void** values, int ncols, long next) {
-  /* To be implemented */
+	record_t r;
+	r = (record_t*) malloc (sizeof(record_t));
+	r->next = next;
+	r->ncols = ncols;
+	r->values = values;
+	return r;
 }
 
 void* record_get(record_t* record, int n) {
-  /* To be implemented */
+	return record->values[n];  
 }
 
 long record_next(record_t* record) {
-  /* To be implemented */
+	return record->next;
 }
 
 void record_free(record_t* record) {
-  /* To be implemented */
+	int i;
+	for (i=0; i<ncols; i++){
+		free(record->values[i]);
+	}
+	free(record->values);
+	free(record);
 }
