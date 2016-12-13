@@ -10,6 +10,10 @@ value_length(type_t type, void* value) {
             return sizeof(int);
         case STR:
             return (strlen((char*) value) + 1) * sizeof(char);
+        case LNG:
+            return sizeof(long);
+        case DBL:
+            return sizeof(float);
         default:
             return 0;
     }
@@ -24,6 +28,13 @@ print_value(FILE* f, type_t type, void* value) {
         case STR:
             fprintf(f, "%s", (char*) value);
             break;
+        case LNG:
+            fprintf(f, "%ld", *((long*) value));
+            break;
+        case DBL:
+            fprintf(f, "%lf", *((double*) value));
+            break;
+        
     }
 }
 
@@ -44,7 +55,11 @@ type_t type_parse(char* type_name) {
         return INT;
     } else if (strcmp(type_name, "STR") == 0) {
         return STR;
-    } else {
+    } else if (strcmp(type_name, "LNG") == 0) {
+        return LNG;
+    } else if (strcmp(type_name, "DBL") == 0) {
+        return DBL;
+    else {
         return -1;
     }
 }
@@ -60,6 +75,14 @@ void* value_parse(type_t type, char* literal) {
         case STR:
             value = malloc((strlen(literal) + 1) * sizeof(char));
             strcpy(value, literal);
+            break;
+        case LNG:
+            value = malloc(sizeof(long));
+            *((long*) value) = atol(literal);
+            break;
+        case DBL:
+            value = malloc(sizeof(double));
+            *((double*) value) = atof(literal);
             break;
         default:
             value = NULL;
